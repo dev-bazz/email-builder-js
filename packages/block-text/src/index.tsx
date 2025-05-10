@@ -1,6 +1,8 @@
 import React, { CSSProperties } from 'react';
 import { z } from 'zod';
 
+import EmailMarkdown from './EmailMarkdown';
+
 const FONT_FAMILY_SCHEMA = z
   .enum([
     'MODERN_SANS',
@@ -74,6 +76,7 @@ export const TextPropsSchema = z.object({
     .nullable(),
   props: z
     .object({
+      markdown: z.boolean().optional().nullable(),
       text: z.string().optional().nullable(),
     })
     .optional()
@@ -98,5 +101,8 @@ export function Text({ style, props }: TextProps) {
   };
 
   const text = props?.text ?? TextPropsDefaults.text;
+  if (props?.markdown) {
+    return <EmailMarkdown style={wStyle} markdown={text} />;
+  }
   return <div style={wStyle}>{text}</div>;
 }
